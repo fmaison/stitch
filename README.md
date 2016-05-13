@@ -1,2 +1,2 @@
 # stitch
-Little binding library for asp.net mvc
+Data binding library for asp.net mvc

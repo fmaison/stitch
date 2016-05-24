@@ -1,6 +1,7 @@
+
 "use strict";
 
-function $ChangeQueue() {
+function $EventQueue() {
     var me = this;
     /**
      * @description
@@ -30,7 +31,7 @@ function $ChangeQueue() {
      * Array of changes
      * @type {Array}
      */
-    this._changes = [];
+    this._queue = [];
 
     this.scheduleChanges = createChangeSchedule(function () {
         me.applyChanges();
@@ -42,26 +43,26 @@ function $ChangeQueue() {
  * Adds a `Watch` to the queue to have its changes digested
  * @param {Object} watch The `Watch` that was responsible for observing the change
  */
-$ChangeQueue.prototype.add = function (watch) {
+$EventQueue.prototype.queueTask = function (task) {
 
-    if (this._changes.length < 1) this.scheduleChanges();
-    this._changes.push(watch);
+    if (this._queue.length < 1) this.scheduleChanges();
+    this._queue.push(task);
 }
 
 /**
  * @description 
  * Applies queued changes
  */
-$ChangeQueue.prototype.applyChanges = function () {
-    var watchers = this._changes;
-    var index = 0, watcher;
-    while (index < watchers.length) {
-        watcher = watchers[index];
+$EventQueue.prototype.applyChanges = function () {
+    var queue = this._queue;
+    var index = 0, task;
+    while (index < queue.length) {
+        task = queue[index];
         // affect change
-        watcher.digest();
+        task.run();
         index++;
     }
 
     // reset
-    watchers.length = 0;
-};
+    queue.length = 0;
+}

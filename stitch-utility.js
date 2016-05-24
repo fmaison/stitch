@@ -104,7 +104,7 @@ function isPrimitive(value) {
  */
 function extend(target, source) {
     for(var property in source) if(source.hasOwnProperty(property)) target[property] = source[property];
-    function base() { this.constructor = d; }
+    function base() { this.constructor = target; }
     base.prototype = source.prototype;
     target.prototype = new base();
 }
